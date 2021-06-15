@@ -1,18 +1,15 @@
 ---
-title: Colophon
+title: $whoami
 permalink: /about/
 layout: page
-excerpt: Hello peeps, I'm student of computer science from Banyuwangi, living in Jogjakarta. This blog for documentation about my programming journey, running on jekyll, hosting on netlify and using my own simple theme.
+excerpt: Howdy cyber folks, I'm a full-time student of computer science engineering. This is my personal blog for documenting my growth in this field.
 comments: false
 ---
 
-He's a student from Banyuwangi, living in Jogjakarta. the blog for documentation about his programming 🎒 journey, running on jekyll, hosting on [now.sh](http://now.sh) and using his own theme, he name it <a href="https://github.com/piharpi/jekyll-klise" target="_blank" rel="noopener">klisé</a>, he also loves to learning web technology; but he often forgot, that a reason why him doing the writing.
+Aldeesh, goes by the name `fastbyt3` in the tech world. He is a student from India pursuing his bachelors in Computer Science Engineering. His primary interests lie in the realm of cybersecurity. He also has a passion for learning new and random things. Beside tech, his hobbies are reading comics and novels and playing badminton.
 
-If you have a question about him or else, just send a letter to him.
-
-You can [report](http://github.com/piharpi/jekyll-klise/issues/new) if there is an broken link(s) or somethings else.
-
-**may u needs ✨**
+If you have anything to ask feel free to shoot a dm 🏹 .
 
 - {{ site.author.email }}
 - github.com/{{ site.author.github }}
+- Discord : Fastbyte#9552 

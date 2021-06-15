@@ -2,12 +2,12 @@
 title: Acknowledgment
 permalink: /thanks/
 layout: page
-excerpt: Thanks to amazing people that i met, who help me out from follishness, connecting me with another good person, giving some advice when i'm at a bad things, pulling me from ordinary to be great.
 comments: false
 ---
 
-Thanks to amazing people that i met, who help me out from follishness, connecting me with another good person, giving some advice when i'm at a bad things, pulling me from ordinary to be great.
-
-<hr>
-
-Hopefully the knowledge that I got from them can be useful, and become a charity for them, Aamiin.
+Huge shoutout to the creator of this theme : [piharpi](https://github.com/piharpi). 
+<br>
+And thanks to everyone in the cybersec community who has assisted me so far to become the individual I am today.
+Hope that my content helps all the readers and infosec peeps. ✨
+<br>
+Happy hacking 🤘❤
