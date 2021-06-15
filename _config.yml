@@ -22,7 +22,7 @@ author:
 
 # URL settings
 url: "https://fastbyt3.gihub.io/" #
-baseurl: "https://fastbyt3.gihub.io/"
+baseurl: 
 permalink: /:title/
 google_analytics: # leave it blank if not wish
 fb_appid:
