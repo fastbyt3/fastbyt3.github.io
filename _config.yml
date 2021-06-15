@@ -21,8 +21,8 @@ author:
   avatar: /assets/img/avatar.jpg # change with your own avatar
 
 # URL settings
-url: "" #
-baseurl:
+url: "https://fastbyt3.gihub.io/" #
+baseurl: "https://fastbyt3.gihub.io/"
 permalink: /:title/
 google_analytics: # leave it blank if not wish
 fb_appid:
