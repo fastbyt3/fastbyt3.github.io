@@ -33,7 +33,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 - site on port 8080 :
 <figure>
-<img src="/test-writeup/site.png" alt="site on port 8080">
+<img src="/assets/img/thm/testwriteup/site.png" alt="site on port 8080">
 <figcaption>Port 8080</figcaption>
 </figure>
 
@@ -59,7 +59,7 @@ Connect to port 4420, the password is sardinethecat.
 ```
 - and connecting to it via nc on `4420` with the gn passwd we have a limited shell
 <figure>
-<img src="/test-writeup/shell.png" alt="restricted shell">
+<img src="/assets/img/thm/testwriteup/shell.png" alt="restricted shell">
 <figcaption>restricted shell</figcaption>
 </figure>
 - since `cd` was not available got a reverse shell working
