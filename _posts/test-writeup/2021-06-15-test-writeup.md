@@ -39,7 +39,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 - link : http://10.10.23.106:8080/viewtopic.php?f=2&t=2
 <figure>
-<img src="/test-writeup/hint.png" alt="hint">
+<img src="/assets/img/thm/testwriteup/hint.png" alt="hint">
 <figcaption>Hint</figcaption>
 </figure>
 - a hint for port knocking(?)
