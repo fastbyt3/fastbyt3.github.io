@@ -31,8 +31,14 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ### Foothold 
 
-- site on port 8080 : ![img](./Pasted%20image%2020210605101307.png)
-- link : http://10.10.23.106:8080/viewtopic.php?f=2&t=2 ![img](./Pasted%20image%2020210605101424.png)
+- site on port 8080 :
+<figure>
+<img src="./Pasted%20image%2020210605101307.png" alt="pic">
+</figure>
+- link : http://10.10.23.106:8080/viewtopic.php?f=2&t=2
+<figure>
+<img src="./Pasted%20image%2020210605101424.png" alt="pic">
+</figure>
 - a hint for port knocking(?)
 - lets try it out : https://sushant747.gitbooks.io/total-oscp-guide/content/port_knocking.html
 - after port knocking twice got access to FTP
@@ -48,7 +54,9 @@ Connect to port 4420, the password is sardinethecat.
 - catlover
 ```
 - and connecting to it via nc on `4420` with the gn passwd we have a limited shell
-![img](./Pasted%20image%2020210605102030.png)
+<figure>
+<img src="./Pasted%20image%2020210605102030.png" alt="pic">
+</figure>
 - since `cd` was not available got a reverse shell working
 - `strings` was not there so used `cat`:
 

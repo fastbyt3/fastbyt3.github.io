@@ -66,7 +66,12 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 - lets try to ping the kali box : 
 	- payload : ![img](./Pasted%20image%2020210417192301.png)
 	- tcpdump : ![img](./Pasted%20image%2020210417192247.png)
-- got a reverse shell using py3 payload : ![img](./Pasted%20image%2020210417193551.png)
+- got a reverse shell using py3 payload :
+
+<figure>
+<img src="./Pasted%20image%2020210417193551.png" alt="pic">
+<figcaption>creds.bak</figcaption>
+</figure>
 
 ----
 
