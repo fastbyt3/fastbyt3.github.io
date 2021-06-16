@@ -59,24 +59,24 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 - lets mount the NFS :
 	- first find the mount using `showmount -e 10.10.229.245`
     <figure>
-    <img src="/cooctus-stories/credsbak.png" alt="creds backup file">
+    <img src="/assets/img/thm/cooctus/credsbak.png" alt="creds backup file">
     </figure>
 - the passwords were for the login page in the website
 - so testing the `/cat` page we have XSS but not sure how we can levarge it
 - so thru XSS we see that the cmd get s exec directly so it might be possible to get RCE
 - capture the request in burp : 
 <figure>
-<img src="/cooctus-stories/testing.png" alt="hint">
+<img src="/assets/img/thm/cooctus/testing.png" alt="hint">
 </figure>
 - lets try to ping the kali box : 
 	- payload : 
     <figure>
-    <img src="/cooctus-stories/sendingping.png" alt="hint">
+    <img src="/assets/img/thm/cooctus/sendingping.png" alt="hint">
     <figcaption>sending ping command</figcaption>
     </figure>
 	- tcpdump : 
 	<figure>
-    <img src="/cooctus-stories/pingop.png" alt="hint">
+    <img src="/assets/img/thm/cooctus/pingop.png" alt="hint">
     <figcaption>the ping is seen in tcpdump</figcaption>
     </figure>
 - got a reverse shell using python3 payload as user : `paradox`.
@@ -169,7 +169,7 @@ print(ct)
 And the python program returns a string : `cherrycoke` which is **szymex** SSH password
 Lets ssh-in as szymex :
 <figure>
-<img src="/cooctus-stories/szymexuser.png" alt="hint">
+<img src="/assets/img/thm/cooctus/szymexuser.png" alt="hint">
 </figure>
 
 ##### szymex -> tux 
@@ -315,7 +315,7 @@ Combine them all and visit the station.
 - turned out to be md5 : `tuxykitty`
 - got ssh as tux : 
 <figure>
-<img src="/cooctus-stories/tuxuser.png" alt="hint">
+<img src="/assets/img/thm/cooctus/tuxuser.png" alt="hint">
 </figure>
 
 ##### tux -> varg 
@@ -326,7 +326,7 @@ Combine them all and visit the station.
 - In the initial commit we have a login script. lets check that out.
 - found a passwd :
 <figure>
-<img src="/cooctus-stories/exposedcreds.png" alt="hint">
+<img src="/assets/img/thm/cooctus/exposedcreds.png" alt="hint">
 <figcaption>password found in CooctOS.py</figcaption>
 </figure>
 - Now we can SSH as `varg` user
@@ -394,12 +394,12 @@ umount: /opt/CooctFS: target is busy.
 - [Stackoverflow post on how to unmount a busy device](https://stackoverflow.com/questions/7878707/how-to-unmount-a-busy-device) suggested to use `-f` and `-l` flags and `-l` flag worked for us.
 - no direct way to get root.txt : 
 <figure>
-<img src="/cooctus-stories/searchingflag.png" alt="hint">
+<img src="/assets/img/thm/cooctus/searchingflag.png" alt="hint">
 </figure>
 - but there was a `.ssh` dir which had the id_rsa for root
 - got root via ssh :
 <figure>
-<img src="/cooctus-stories/rootflag.png" alt="">
+<img src="/assets/img/thm/cooctus/rootflag.png" alt="">
 </figure>
 
 -----
