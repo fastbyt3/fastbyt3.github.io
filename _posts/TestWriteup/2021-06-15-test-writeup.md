@@ -55,7 +55,7 @@ Connect to port 4420, the password is sardinethecat.
 ```
 - and connecting to it via nc on `4420` with the gn passwd we have a limited shell
 <figure>
-<img src="/__posts/../../../_site/test-writeup/Pasted%20image%2020210605102030.png" alt="pic">
+<img src="/__posts/test-writeup/Pasted%20image%2020210605102030.png" alt="pic">
 </figure>
 - since `cd` was not available got a reverse shell working
 - `strings` was not there so used `cat`:
