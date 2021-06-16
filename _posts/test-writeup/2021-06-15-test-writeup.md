@@ -33,12 +33,12 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 - site on port 8080 :
 <figure>
-<img src="/TestWriteup/site.png" alt="pic">
+<img src="/test-writeup/site.png" alt="pic">
 </figure>
 
 - link : http://10.10.23.106:8080/viewtopic.php?f=2&t=2
 <figure>
-<img src="/TestWriteup/hint.png" alt="pic">
+<img src="/test-writeup/hint.png" alt="pic">
 </figure>
 - a hint for port knocking(?)
 - lets try it out : https://sushant747.gitbooks.io/total-oscp-guide/content/port_knocking.html
@@ -57,7 +57,7 @@ Connect to port 4420, the password is sardinethecat.
 ```
 - and connecting to it via nc on `4420` with the gn passwd we have a limited shell
 <figure>
-<img src="/TestWriteup/shell.png" alt="pic">
+<img src="/test-writeup/shell.png" alt="pic">
 </figure>
 - since `cd` was not available got a reverse shell working
 - `strings` was not there so used `cat`:
