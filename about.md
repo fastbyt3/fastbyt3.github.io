@@ -6,10 +6,22 @@ excerpt: Howdy cyber folks, I'm a full-time student of computer science engineer
 comments: false
 ---
 
-Aldeesh, goes by the name `fastbyt3` in the tech world. He is a student from India pursuing his bachelors in Computer Science Engineering. His primary interests lie in the realm of cybersecurity. He also has a passion for learning new and random things. Beside tech, his hobbies are reading comics and novels and playing badminton.
+Hello visitor 👋, welcome to my place on the internet
 
-If you have anything to ask feel free to shoot a dm 🏹 .
+I go by **fastbyte** in the cyber realm but IRL my name is Aldeesh. Currently I'm a student pursuing my Bachelor's in Computer Science Engineering.  I focus on the Offensive side of cybersecurity but I dabble in blue team activities from time to time. 
+
+I constantly grind on HackTheBox and Tryhackme to improve my red-teaming skills.
+I'm a "Pro hacker" on HTB and _top 1% globally_ with "God" rank on tryhackme.
+
+Apart from that I participate in CTFs and enjoy solving past CTF challenges.
+
+Outside the infosec realm, I enjoy reading a lot. My main intrests are fiction novels, comics and manhwas. Watching animes is also a major hobby of mine.
+
+If you have anything to ask or wanna root some boxes together feel free to shoot a dm 🏹 .
 
 - {{ site.author.email }}
 - github.com/{{ site.author.github }}
 - Discord : Fastbyte#9552 
+- Twitter : fastbyt3
+
+And, if you want to take a look at my portfolio : [not ready yet](/thanks)
