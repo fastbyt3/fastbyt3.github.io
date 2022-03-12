@@ -21,7 +21,7 @@
 
 # My solves in this CTF
 
-I was able to solve just 3 challenges(two during the event and one just as the event ended). Can't say much about all the challenges cos I attempted only 7 of 'em.
+I was able to solve just 4 challenges(three during the event and one just as the event ended). Can't say much about all the challenges cos I attempted only 7 of 'em.
 
 This post will contain my writeups for all the three challenges. (I might include writeups for challenges I solved with the help of writeups too)
 
