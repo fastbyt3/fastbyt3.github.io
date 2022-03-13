@@ -8,6 +8,9 @@
     - [Equality solve script](#equality-solve-script)
   - [Dante's Inferno](#dantes-inferno)
     - [Dante's Inferno Solve script](#dantes-inferno-solve-script)
+  - [Warmup Encoder](#warmup-encoder)
+    - [Understanding the encryption](#understanding-the-encryption)
+    - [Solve approach](#solve-approach)
 - [Pwn Challenges](#pwn-challenges)
   - [Easy Register](#easy-register)
     - [Static analysis w/ Ghidra](#static-analysis-w-ghidra)
@@ -185,6 +188,122 @@ And as output we get the flag: **1337UP{U_d3CrYPt3D_th3_k3Y_30494762}**
 
 ----
 
+## Warmup Encoder
+
+> This was a challenge I solved only after the CTF had ended.
+
+**Challenge Description:** This script was used in order to encrypt some evil text! Since you're a 1337 hacking expert, we'll give you this one to warm up!
+
+**encrypt.py**:
+
+```python
+# ENCRYPT.py
+
+from sympy import isprime, prime
+
+flag = '<REDACTED>'
+
+def Ord(flag):
+    x0r([ord(i) for i in flag])
+    
+def x0r(listt):
+    ff = []
+    for i in listt:
+        if isprime(i) == True:
+            ff.append(prime(i) ^ 0x1337)
+        else:
+            ff.append(i ^ 0x1337)
+    b1n(ff)
+
+def b1n(listt):
+    ff = []
+    for i in listt:
+        ff.append(int(bin(i)[2:]))
+    print(ff)
+    
+if __name__ == "__main__":
+    Ord(flag)
+
+'''
+ OUTPUT :
+[1001100000110, 1001100000100, 1001100000100, 1001100000000, 1001101100010, 1001101100111, 1001101001100, 1001101001111, 1001100000111, 1001101000101, 1001101101000, 1001100000011, 1001101011001, 1001101110011, 1001101101000, 1001101110101, 1001101011110, 1001101011001, 1001100000011, 1001011001010, 1001101100101, 1001101001110, 1001101101000, 1001101110010, 1001101011001, 1001001111100, 1001100000111, 1001101010011, 1001100000100, 1001101000101, 1001101101000, 1001100000011, 1001101000101, 1001100000100, 1001101101000, 1001101000011, 1001101111111, 1001100000100, 1001101101000, 1001101100000, 1001100000100, 1001100000011, 1000101111100, 1001100000100, 1001111000110, 1001101000011, 1001101101000, 1001100001111, 1001100000111, 1001100000000, 1001100001110, 1001100000111, 1001100000000, 1001111000110, 1001100000001, 1001101001010]
+'''
+```
+
+### Understanding the encryption
+
+The flag is first made into a list of its ascii codes. The list of ASCII codes is passed to _x0r_ function which checks if the ASCII code is prime. If prime then it computes the _N'th_ prime number(N is the ascii code), XORs it with `0x1337` and appends to a list. Else the ASCII code is simply XORed with `0x1337` and then appended to list. The result list from x0r function is passed to _b1n()_ function which converts each of the values in the list to its respective binary form.  
+
+
+### Solve approach
+
+1. convert binary num in list to decimal
+  ```python
+  def revBin(l):
+    res = []
+    for i in l:
+      x = str(i)
+      res.append(int(x,2))
+    return res
+  ```
+2. XOR the decimal values with `0x1337`. This has 2 cases:
+	(i) If the ascii code was NOT prime -> we get the ascii code directly
+	(ii) Else we get a prime number whose position(in list of prime nums) needs to be found
+		- but the decimal list had no prime numbers => So we can eliminate the need to check the position of prime number
+
+```python
+In [4]: l =[49, 51, 51, 55, 85, 80, 123, 120, 48, 114, 95, 52, 110, 68, 95, 66, 105, 110, 52, 82, 121, 95, 69, 110, 48, 100, 51, 114, 95, 52, 114, 51, 95, 116, 72, 51, 9
+    ...: 5, 87, 51, 52, 51, 116, 95, 56, 48, 55, 57, 48, 55, 54, 125]
+
+In [5]: for i in l:
+    ...:     if isprime(i):
+    ...:         print(i)
+    ...:
+
+# No output
+```
+
+
+### Final script
+
+```python
+from sympy import isprime, prime
+
+def revBin(l):
+	res = []
+	for i in l:
+		x = str(i)
+		res.append(int(x,2))
+	return res
+
+def revXOR(l):
+	res = []
+	for i in l:
+		x = i ^ 0x1337
+		if isprime(x):
+			# Find possible primes and then get its position
+			pass
+		else:
+			res.append(x)
+	return res
+
+def toChr(l):
+	return "".join(chr(x) for x in l)
+
+inp = [1001100000110, 1001100000100, 1001100000100, 1001100000000, 1001101100010, 1001101100111, 1001101001100, 1001101001111, 1001100000111, 1001101000101, 1001101101000, 1001100000011, 1001101011001, 1001101110011, 1001101101000, 1001101110101, 1001101011110, 1001101011001, 1001100000011, 1001011001010, 1001101100101, 1001101001110, 1001101101000, 1001101110010, 1001101011001, 1001001111100, 1001100000111, 1001101010011, 1001100000100, 1001101000101, 1001101101000, 1001100000011, 1001101000101, 1001100000100, 1001101101000, 1001101000011, 1001101111111, 1001100000100, 1001101101000, 1001101100000, 1001100000100, 1001100000011, 1000101111100, 1001100000100, 1001111000110, 1001101000011, 1001101101000, 1001100001111, 1001100000111, 1001100000000, 1001100001110, 1001100000111, 1001100000000, 1001111000110, 1001100000001, 1001101001010]
+
+if __name__ == "__main__":
+	decList = revBin(inp)
+	resList = revXOR(decList)
+	# print(resList)
+	res = toChr(resList)
+	print(res)
+```
+
+And running the program gives us the flag : **1337UP{x0r_4nD_Bin4Ry_En0d3r_4r3_tH3_W343t_8079076}**
+
+----
+
 # Pwn Challenges
 
 ## Easy Register
@@ -338,3 +457,4 @@ $ cat flag
 Flag: **1337UP{Y0u_ju5t_r3g15t3r3d_f0r_50m3_p01nt5}**
 
 ---
+
